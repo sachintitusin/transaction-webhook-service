@@ -15,6 +15,7 @@ The design focuses on:
 ## Implementation note
 For simplicity, this implementation does not include CORS configuration or rate limiting. Since webhook endpoints are server-to-server integrations, CORS is not applicable. In a production environment, webhook authentication (e.g., signature verification) and controlled traffic management would be added as part of the perimeter security layer.
 
+
 ---
 
 ## What the Service Does
@@ -170,6 +171,18 @@ pytest
 
 ---
 
+## Database Schema Management
+
+In production, database schema is created explicitly using SQL to avoid implicit
+schema mutations at application startup. The authoritative schema is defined in
+`db/schema.sql` and applied manually to the production database.
+
+Automatic schema creation via SQLAlchemy is enabled only in development mode for
+local convenience. In a real-world setup, schema changes would be managed using
+versioned migrations 
+
+---
+
 ## Production Considerations
 
 This implementation is production-correct in terms of data integrity and behavior, but intentionally simplified.
@@ -179,6 +192,17 @@ In a real production environment, background processing could be evolved into:
 - Dedicated worker services
 - Retry handling and dead-letter queues
 - Observability (logging, metrics, tracing)
+
+---
+
+## Deployment Notes
+
+- The service is deployed on Render as a cloud-hosted backend.
+- PostgreSQL is hosted on Supabase using the **transaction connection pooler**.
+- The pooler is used to ensure compatibility with stateless cloud environments
+  and to avoid IPv6 routing issues present in direct connections.
+- Automatic table creation is disabled in production to prevent accidental
+  schema mutations.
 
 ---
 
