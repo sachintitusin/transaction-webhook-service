@@ -12,6 +12,10 @@ The design focuses on:
 - Clear invariants enforced via code and tests
 
 ---
+## Implementation note
+For simplicity, this implementation does not include CORS configuration or rate limiting. Since webhook endpoints are server-to-server integrations, CORS is not applicable. In a production environment, webhook authentication (e.g., signature verification) and controlled traffic management would be added as part of the perimeter security layer.
+
+---
 
 ## What the Service Does
 
