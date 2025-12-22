@@ -1,13 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-
-# SQLite as a start, we will switch to postgres later
-DATABASE_URL = "sqlite:///./app.db"
+from app.core.config import settings
 
 # Engine is our connection to DB
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}  # SQLite-specific
+    settings.DATABASE_URL,
+    echo=settings.ENVIRONMENT == "development",
+    connect_args={"sslmode": "require"} if settings.ENVIRONMENT == "production" else {}                   
 )
 
 # Session factory (one session per request)
