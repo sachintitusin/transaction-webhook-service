@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.core.database import Base, engine
 from app.api.routes import router
 from app.core.config import settings
+from datetime import datetime, timezone
 
 app = FastAPI(title="Transaction Webhook Service")
 
@@ -13,4 +14,4 @@ app.include_router(router)
 
 @app.get("/")
 def health():
-    return {"status": "HEALTHY"}
+    return {"status": "HEALTHY", "current_time": datetime.now(timezone.utc).isoformat()}
