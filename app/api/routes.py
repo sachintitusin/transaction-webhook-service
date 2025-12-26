@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 from app.core.database import get_db
 from app.schemas.transaction import TransactionCreate, TransactionResponse
 from app.services.transaction_service import TransactionService
@@ -17,10 +18,10 @@ def ingest_webhook(
     return {"status": "ACCEPTED"}
 
 
-@router.get("/v1/transactions/{transaction_id}", response_model=TransactionResponse)
+@router.get("/v1/transactions/{transaction_id}", response_model=List[TransactionResponse])
 def get_transaction(transaction_id: str, db: Session = Depends(get_db)):
     service = TransactionService(db)
     tx = service.get_transaction(transaction_id)
     if not tx:
         raise HTTPException(status_code=404, detail="Transaction not found")
-    return tx
+    return [tx]
