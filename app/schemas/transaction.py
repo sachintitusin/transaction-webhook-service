@@ -7,14 +7,14 @@ class TransactionCreate(BaseModel):
     transaction_id: str = Field(..., min_length=1)
     source_account: str = Field(..., min_length=1)
     destination_account: str = Field(..., min_length=1)
-    amount: int = Field(..., gt=0)
+    amount: float = Field(..., gt=0)
     currency: str = Field(..., min_length=1)
 
 class TransactionResponse(BaseModel):
     transaction_id: str
     source_account: str
     destination_account: str
-    amount: int
+    amount: float
     currency: str
     status: TransactionStatus
     created_at: datetime
