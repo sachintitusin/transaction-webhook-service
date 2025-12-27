@@ -5,7 +5,8 @@ from sqlalchemy import (
     String,
     DateTime,
     Enum,
-    UniqueConstraint
+    UniqueConstraint,
+    Numeric
 )
 from sqlalchemy.sql import func
 from app.core.database import Base
@@ -27,7 +28,13 @@ class Transaction(Base):
 
     source_account = Column(String, nullable=False)
     destination_account = Column(String, nullable=False)
-    amount = Column(Integer, nullable=False)
+
+    # ✅ FIX: precise money storage
+    amount = Column(
+        Numeric(precision=18, scale=2),
+        nullable=False
+    )
+
     currency = Column(String, nullable=False)
 
     status = Column(
