@@ -197,12 +197,14 @@ In a real production environment, background processing could be evolved into:
 
 ## Deployment Notes
 
-- The service is deployed on Render as a cloud-hosted backend.
-- PostgreSQL is hosted on Supabase using the **transaction connection pooler**.
-- The pooler is used to ensure compatibility with stateless cloud environments
-  and to avoid IPv6 routing issues present in direct connections.
-- Automatic table creation is disabled in production to prevent accidental
-  schema mutations.
+- The service is deployed on AWS using an EC2 instance.
+- An Application Load Balancer (ALB) is placed in front of the EC2 instance to handle
+  incoming traffic and provide a stable public endpoint.
+- PostgreSQL is hosted on Supabase and accessed using the transaction connection pooler.
+- The pooler is used to ensure compatibility with stateless compute instances and to
+  avoid connection exhaustion.
+- Automatic schema creation is disabled in production to prevent accidental schema
+  mutations.
 
 ---
 
