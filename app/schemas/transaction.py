@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime
 from app.models.transaction import TransactionStatus
 
@@ -26,3 +26,8 @@ class TransactionResponse(BaseModel):
         # Returning correct JSON instead of SQLAlchemy obj
         # We do it only on responses
         orm_mode = True
+        json_encoders = {
+            Decimal: lambda v: float(
+                v.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            )
+        }
